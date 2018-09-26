@@ -1,2 +1,2 @@
-# Mazolver
+# Mazelvo
 MAZe-sOLVER
