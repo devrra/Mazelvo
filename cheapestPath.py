@@ -99,9 +99,23 @@ def generateHeuristic(init,R,C):
         Open.reverse() 
     return heuristic
 
+"""
+Function Name:       A_star
+Input(s):            grid[given obstacle map -- a 2D matrix with 0=no_obstacle, 1=obstacle]
+                     init[initial state -- (#row, #column, #heading)]
+                     goal[final position -- (#row, #column)]
+                     cost[list of cost associated with forward, right, or left movements respectively]
+Output:              expand
+                     
+Example Call:        A_star(grid, [1,2,1], [3,4], [1,2,3])
+"""
 def A_star(grid,init,goal,cost):
+    #call generateHeuristic to get heuristic matrix
     heuristic = generateHeuristic(init[:2], len(grid), len(grid[0]))
+    #matrix "closed": -- 
+    #initializing closed matrix with all 0   
     closed = [[0 for col in range(len(grid[0]))] for row in range(len(grid))]
+       
     closed[init[0]][init[1]] = 1
 
     expand = [[-1 for col in range(len(grid[0]))] for row in range(len(grid))]
