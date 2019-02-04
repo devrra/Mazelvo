@@ -1,9 +1,17 @@
+"""
+Author:              Yash Raj
+FileName:            cheapestPath.py
+What does it do?
+       pass
+Functions:           generateHeuristic, A_star, generatePath, improvise, smooth, Draw
+Global Variables:    grid, init, goal, R, C, cost, delta, delta_name, screenSize, hor, ver, hor_halfCell, ver_halfCell
+""" 
+
 from math import *
 from copy import deepcopy
 import matplotlib.pyplot as plt
 import cv2
 import numpy as np
-
 
 grid = [
        [0,0,0,0,1,0,0,0,1,0,0,0,0,0,0],
@@ -57,19 +65,33 @@ delta = [[-1, 0 ], # go up
          [ 0, 1 ]] # go right
 
 delta_name = ['^', '<', 'v', '>']
-
+"""
+Function Name:       generateHeuristic
+Input(s):            init[initial state -- (#row, #column)]
+                     R[total number of rows]
+                     C[total number of columns]
+Output:              heuristic[a matrix with R rows and C columns]
+                     (value at each cell in this matrix is the least number of steps required to reach the cell from init assuming no obstacles)
+Example Call:        generateHeuristic([1,2],5,6)
+"""
 def generateHeuristic(init,R,C):
+    #initializing heuristic matrix with all zero
     heuristic = [[0 for c in range(C)] for r in range(R)]
-    visited = [[0 for c in range(C)] for r in range(R)]
+    #initializing visited matrix with all zero
+    visited = [[0 for c in range(C)] for r in range(R)]   
     r,c = init
-    visited[r][c] = 1 
+    visited[r][c] = 1       #initial position is always visited first
     h = 0
+    #Open is a 1D list that consist elements of the following type:
+    #                [h,r,c] ,where h = heuristics number assigned to cell (r,c)    
     Open = [[h]+init]
+    #while loop run to assign proper values heuristic matrix
     while len(Open)!=0:
         h,r,c = Open.pop()
         for i in range(len(delta)): 
+            #whats delta? check line ---
             dr,dc = delta[i]
-            if r+dr in range(R) and c+dc in range(C) and visited[r+dr][c+dc]==0:
+            if r+dr in range(R) and c+dc in range(C) and visited[r+dr][c+dc]==0:   
                 heuristic[r+dr][c+dc] = h+1
                 Open.append([h+1,r+dr,c+dc])  
                 visited[r+dr][c+dc] = 1
