@@ -131,26 +131,31 @@ def A_star(grid,init,goal,cost):
     count = 0
     
     while not found and not resign:
+        #if no cell eligible to be visited.
         if len(Open) == 0:
             resign = True
             return "Fail"
         else:
-            Open.sort()
-            Open.reverse()
+            Open.sort()     #sorts in ascending order of the first element of the element-list.
+            Open.reverse()  
             Next = Open.pop()
-            f,g,x,y,orient = Next
+            f,g,x,y,orient = Next         #(x,y) -- cell presently being visited.
             expand[x][y] = count
             count += 1
             
+            # if goal found.
             if x == goal[0] and y == goal[1]:
                 found = True
             else:
+                # loop to decide best next move.
                 for i in range(len(delta)):
                     x2 = x + delta[i][0]
                     y2 = y + delta[i][1]
+                    # if we do not fall out of the grid in next move... 
                     if x2 >= 0 and x2 < len(grid) and y2 >=0 and y2 < len(grid[0]):
+                        # and if the next grid is not visited nor is an obstacle...    
                         if closed[x2][y2] == 0 and grid[x2][y2] == 0:
-                            ##comput action - i is newOrient
+                            #given present orientation and next-cell computing the action required.
                             if abs(i-orient) == 3:
                                 if orient == 3:    # left
                                     action = 2
@@ -158,12 +163,19 @@ def A_star(grid,init,goal,cost):
                                     action = 1
                             else:
                                 action = (i-orient)%3
+                            #adding cost according to the action decided.
                             g2 = g + cost[action]
                             Open.append([heuristic[x2][y2]+g2, g2, x2, y2,i])
                             closed[x2][y2] = 1
 
     return expand
 
+"""
+Function Name:       generatePath
+Input(s):            expand
+Output:              discreteRoute                 
+Example Call:        generatePath(expand)
+"""
 def generatePath(expand):
     #visited = grid[:][:]
     r,c = goal
