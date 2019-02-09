@@ -117,7 +117,7 @@ def A_star(grid,init,goal,cost):
     closed = [[0 for col in range(len(grid[0]))] for row in range(len(grid))]
        
     closed[init[0]][init[1]] = 1
-
+    
     expand = [[-1 for col in range(len(grid[0]))] for row in range(len(grid))]
     action = [[-1 for col in range(len(grid[0]))] for row in range(len(grid))]
 
@@ -195,6 +195,12 @@ def generatePath(expand):
     discreteRoute.reverse()    
     return discreteRoute    
 
+"""
+Function Name:       improvise
+Input(s):            path[list of solution path-points]
+Output:              detailedPath[list of solution path including intermediate points]   
+Example Call:        improvise(path)
+"""
 def improvise(path):     ## to introduce intermediate points in the path.
     detailedPath = [path[0]]
     for i in range(1,len(path)):
@@ -205,7 +211,15 @@ def improvise(path):     ## to introduce intermediate points in the path.
             detailedPath.append([x0+dx*j,y0+dy*j])
         detailedPath.append(path[i])         
     return detailedPath        
-
+"""
+Function Name:       smooth
+Input(s):            path[list of solution path including intermediate points]
+                     weight_data[ratio for original solution to be reflected in final smooth path]
+                     weight_smooth[ratio for smoothness of final smooth path]
+                     tolerance
+Output:              smoothened path[list of solution points in floating type]   
+Example Call:        smooth(path)
+"""
 def smooth(path, weight_data = 0.5, weight_smooth = 0.42, tolerance = 0.000001):
     ## discrete->cont. Domain | returns set of real points. 
     newpath = deepcopy(path)
@@ -220,12 +234,23 @@ def smooth(path, weight_data = 0.5, weight_smooth = 0.42, tolerance = 0.000001):
                 change += abs(aux-newpath[i][j])
     return newpath
 
+#size of output screen
 screenSize = 660
+#number of horizontal cells
 hor = len(grid[0])
+#number of verticel cells
 ver = len(grid)
+#half-lengths of cell in horizontal and vertical axes
 hor_halfCell = int(screenSize/(2*hor))
 ver_halfCell = int(screenSize/(2*ver))
 
+"""
+Function Name:       Draw
+Input(s):            path[list of solution path-points in floating type]
+                     grid
+Output:              none
+Example Call:        Draw(path, grid)
+"""
 def Draw(path,grid):
     cv2.namedWindow("Map")
     Map = np.zeros((screenSize,screenSize,3), dtype = np.uint8)    
